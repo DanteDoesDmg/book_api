@@ -1,6 +1,7 @@
 ## Demo link:
 http://rchelek.pythonanywhere.com/
 
+## Opis:
 Akpliacja używa danych z na podstawie danych znajdujących się na stronie https://www.googleapis.com/books/v1/volumes
 Aplikacja posiada proste API umożliwiające wykonanie następujących operacji:
 
