@@ -15,6 +15,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 def homepage(request):
+
     return render(request, 'base.html')
 def prepare_books(book_list):
     """Funkcja przyjmuje jako argument listę książek z zapytania GET na
@@ -64,11 +65,13 @@ def get_external_books(request):
     """
     try:
         body = request.body.decode('utf-8')
-
-        if body == '':
-            return JsonResponse(
-                status=400, data={'msg': "Missing body with required parameter 'q'"})
-        body = json.loads(request.body.decode('utf-8'))
+        if not isinstance(body, dict):
+            body = request.POST
+        else:
+            if body == '':
+                return JsonResponse(
+                    status=400, data={'msg': "Missing body with required parameter 'q'"})
+            body = json.loads(request.body.decode('utf-8'))
 
         if 'q' not in body:
             return JsonResponse(
@@ -104,13 +107,13 @@ def get_external_books(request):
             Book.objects.bulk_update(existing_books, fields_to_update)
         if len(books_to_create) > 0:
             return JsonResponse(
-                status=201, data={'msg': 'New books were succesfully added to the databasse'})
+                status=204, data={'msg': 'New books were succesfully added to the databasse'})
         else:
             return JsonResponse(
                 status=204, data={'msg': 'Succesfully updated books'})
 
     except BaseException as error:
-
+        print(error)
         return JsonResponse(status=500, data={})
 
 
@@ -158,7 +161,7 @@ def get_books(request, book_id=None):
                         except json.decoder.JSONDecodeError:
                             # Na wypadek podania autora w url bez ""
                             authors.append(author)
-                    authors_filter = reduce(operator.and_, (Q(
+                    authors_filter = reduce(operator.or_, (Q(
                         authors__icontains=author) for author in authors))
 
                 elif param == 'sort':

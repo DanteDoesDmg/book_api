@@ -6,6 +6,27 @@
     <title>Homepage</title>
 </head>
 <body>
-    {% %}
+    <form action="/db" method="post">{% csrf_token %}
+        <label for="q">Wpisz q, do zapytania POST na adres db/ </label>
+        <input id="q" type="text" name="q" value="{{ current_name }}">
+        <input type="submit" value="Wyślij POST">
+    </form>
+    <br>
+    <form action="/books" method="get">
+        <label for="author">Wpisz autora dla którego chcesz wyszukać książki </label><br>
+        <input id="author" type="text" name="author" value="tolkien"><br>
+        <label for="author2">Wpisz drugiego autora dla którego chcesz wyszukać książki</label><br>
+        <input id="author2" type="text" name="author" value="William Howard Green"><br>
+        <label for="published_date">Wpisz datę dla której chcesz wyszukać książki </label><br>
+        <input id="published_date" type="text" name="published_date" value="2012"><br>
+        <label for="published_date2">Wpisz datę dla której chcesz wyszukać książki </label><br>
+        <input id="published_date2" type="text" name="published_date" value="1995"><br>
+        <label for="sort">Wybierz sortowanie (-published_date lub published_date) </label><br>
+        <input id="sort" type="text" name="sort" value="-published_date"><br>
+        <input type="submit" value="OK">
+    </form>
+    
+    <a href="books">Pobierz wszystkie książki</a>
+    <a href="books/93">Pobierz książkę o id 93</a>
 </body>
 </html>
