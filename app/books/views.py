@@ -14,6 +14,8 @@ from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 
+def homepage(request):
+    return render(request, 'base.html')
 def prepare_books(book_list):
     """Funkcja przyjmuje jako argument listę książek z zapytania GET na
     https://www.googleapis.com/books/v1/volumes?q=somestring, następnie
@@ -156,9 +158,8 @@ def get_books(request, book_id=None):
                         except json.decoder.JSONDecodeError:
                             # Na wypadek podania autora w url bez ""
                             authors.append(author)
-
                     authors_filter = reduce(operator.and_, (Q(
-                        authors__icontains=json.loads(author)) for author in author))
+                        authors__icontains=author) for author in authors))
 
                 elif param == 'sort':
                     order_by = [order for order in request.GET.getlist(param)
@@ -175,5 +176,5 @@ def get_books(request, book_id=None):
         return JsonResponse(data={'books': list(books)})
 
     except BaseException as err:
- 
+        print(err)
         return JsonResponse(data={'msg': "Server error"}, status=500)
